@@ -1,6 +1,8 @@
 from flask import request
 from flask_restx import Resource, Namespace
-from models import Movie, MovieSchema
+
+import service
+from dao.model.movie import Movie, MovieSchema
 from config import Config
 
 movie_ns = Namespace('movies')
@@ -17,29 +19,29 @@ class MovieView(Resource):
             'genre_id': genre,
             'year': year,
         }
-        all_movies = movie_service.get_all(filters)
+        all_movies = service.movie.get_all(filters)
         return MovieSchema(many=True).dump(all_movies)
 
     def post(self):
         rj = request.json
-        movie = movie_service.create(rj)
+        movie = service.movie.create(rj)
         return '', 201, {'location:SQLALCHEMY_DATABASE_URI'}
 
 @movie_ns.route('/<int: mid>')
 class MovieView(Resource):
     def get(self, mid):
-        one_movie = movie_service.get_one(mid)
+        one_movie = service.movie.get_one(mid)
         return MovieSchema.dump(one_movie)
 
     def put(self, mid):
         rj = request.json
         if id not in rj:
             rj['id'] = mid
-        movie_service.update(rj)
+        service.movie.update(rj)
         return 'New movie added', 204
 
     def delete(self, mid):
-        movie_service.delete(mid)
+        service.movie.delete(mid)
         return 'Movie deleted', 204
 
 
