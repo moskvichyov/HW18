@@ -27,6 +27,9 @@ class MovieDao:
 
     def delete(self, mid):
         movie = self.get_one(mid)
-
-        self.session.delete(movie)
-        self.session.commit()
+        if movie:
+            try:
+                self.session.delete(movie)
+                self.session.commit()
+            except:
+                return '', 404

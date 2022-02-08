@@ -32,9 +32,9 @@ class MovieView(Resource):
 class MovieView(Resource):
     def get(self, mid):
         one_movie = movie_service.get_one(mid)
-        try:
+        if one_movie:
             return MovieSchema.dump(one_movie), 200
-        except:
+        else:
             return f'Not found {mid}'
 
     def put(self, mid):
@@ -43,7 +43,7 @@ class MovieView(Resource):
         if id not in rj:
             rj['id'] = mid
         movie_service.update(rj)
-        return 'New movie added', 204
+        return 'New movie added', 204, {'location':Config.SQLALCHEMY_DATABASE_URI}
 
     def patch(self, mid):
         rj = request.json

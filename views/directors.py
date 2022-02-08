@@ -16,4 +16,7 @@ class DirectorView(Resource):
 class DirectorView(Resource):
     def get(self, id):
         one_director = director_service.query.get(id)
-        return DirectorSchema().dump(one_director)
+        if one_director:
+            return DirectorSchema().dump(one_director)
+        else:
+            return '', 404

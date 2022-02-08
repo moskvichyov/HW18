@@ -16,5 +16,8 @@ class GenreView(Resource):
 class GenreView(Resource):
     def get_one(self, gid):
         one_director = service.genre.query.get(gid)
-        return GenreSchema.dump(one_director)
+        if one_director:
+            return GenreSchema.dump(one_director)
+        else:
+            return '', 404
 
