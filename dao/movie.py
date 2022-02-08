@@ -11,8 +11,22 @@ class MovieDao:
     def get_all(self):
         return self.session.query(Movie).all()
 
-    def put(self):
-        pass
+    def create(self, data):
+        movie = Movie(**data)
 
-    def delete(self):
-        pass
+        self.session.add(movie)
+        self.session.commit()
+        return movie
+
+    def update(self, movie):
+        self.session.add(movie)
+        self.session.commit()
+
+        return movie
+
+
+    def delete(self, mid):
+        movie = self.get_one(mid)
+
+        self.session.delete(movie)
+        self.session.commit()

@@ -7,33 +7,26 @@ from views.directors import director_ns
 from views.movies import movie_ns
 from views.genres import genre_ns
 
-def create_app(config_object):
+def create_app(config: Config):
      app = Flask(__name__)
-     app.config.from_object(config_object)
-     register_extensions(app)
+     app.config.from_object(config)
+     app.app_context().push()
+     # register_extensions(app)
      return app
 
-
-def register_extensions(app):
+def configure_app(app: Flask):
      db.init_app(app)
      api = Api(app)
      api.add_namespace(director_ns)
      api.add_namespace(movie_ns)
      api.add_namespace(genre_ns)
-     create_data(app, db)
-#
-#
-def create_data(app, db):
-     with app.app_context():
-          db.create_all()
-          app = create_app(Config())
-          app.debug = True
 
 
-app = create_app(Config())
-app.debug = True
+
 
 if __name__ == '__main__':
+     app_config = Config()
+     app = create_app(app_config)
      app.run(host="localhost", port=10001, debug=True)
 
 
