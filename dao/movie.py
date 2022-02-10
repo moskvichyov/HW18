@@ -1,4 +1,5 @@
 from dao.model.movie import Movie
+from flask_restx import abort
 
 
 class MovieDao:
@@ -6,7 +7,10 @@ class MovieDao:
         self.session = session
 
     def get_one(self, mid):
-        return self.session.query(Movie).get(mid)
+        try:
+            return self.session.query(Movie).get(mid)
+        except:
+            abort(404)
 
     def get_all(self):
         return self.session.query(Movie).all()
@@ -26,10 +30,9 @@ class MovieDao:
 
 
     def delete(self, mid):
-        movie = self.get_one(mid)
-        if movie:
-            try:
-                self.session.delete(movie)
-                self.session.commit()
-            except:
-                return '', 404
+        try:
+            movie = self.get_one(mid)
+            self.session.delete(movie)
+            self.session.commit()
+        except:
+            abort(404)

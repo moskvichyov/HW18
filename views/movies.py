@@ -1,9 +1,9 @@
 from flask import request
 from flask_restx import Resource, Namespace
 
-import service
+
 from container import movie_service
-from dao.model.movie import Movie, MovieSchema
+from dao.model.movie import MovieSchema
 from config import Config
 
 movie_ns = Namespace('movies')
@@ -25,17 +25,15 @@ class MovieView(Resource):
 
     def post(self):
         rj = request.json
-        movie = movie_service.create(rj)
+        movie_service.create(rj)
         return '', 201
 
 @movie_ns.route('/<int: mid>')
 class MovieView(Resource):
     def get(self, mid):
         one_movie = movie_service.get_one(mid)
-        if one_movie:
-            return MovieSchema.dump(one_movie), 200
-        else:
-            return f'Not found {mid}'
+        return MovieSchema.dump(one_movie), 200
+
 
     def put(self, mid):
         rj = request.json
