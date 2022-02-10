@@ -32,7 +32,9 @@ class DirectorDao:
 
 
     def delete(self, did):
-        director = self.get_one(did)
-
-        self.session.delete(director)
-        self.session.commit()
+        try:
+            director = self.get_one(did)
+            self.session.delete(director)
+            self.session.commit()
+        except:
+            abort(404)

@@ -18,7 +18,7 @@ class GenreView(Resource):
     def get_one(self, gid):
         one_director = genre_service.get_one(gid)
         if one_director:
-            return GenreSchema.dump(one_director)
+            return GenreSchema().dump(one_director)
         else:
             return '', 404
 

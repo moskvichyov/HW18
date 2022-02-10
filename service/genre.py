@@ -15,7 +15,7 @@ class GenreService:
 
     def update(self, data):
         gid = data.get('id')
-        genre = self.get_one(gid)
+        genre = self.dao.get_one(gid)
 
         genre.name = data.get('name')
 
