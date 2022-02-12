@@ -1,5 +1,4 @@
 from dao.model.director import Director
-from flask_restx import abort
 
 
 class DirectorDao:
@@ -7,10 +6,7 @@ class DirectorDao:
         self.session = session
 
     def get_one(self, did):
-        try:
-            return self.session.query(Director).get(did)
-        except:
-            abort(404)
+        return self.session.query(Director).get(did)
 
     def get_all(self):
         return self.session.query(Director).all()
@@ -22,19 +18,13 @@ class DirectorDao:
         self.session.commit()
         return director
 
-
     def update(self, director):
         self.session.add(director)
         self.session.commit()
 
         return director
 
-
-
     def delete(self, did):
-        try:
-            director = self.get_one(did)
-            self.session.delete(director)
-            self.session.commit()
-        except:
-            abort(404)
+        director = self.get_one(did)
+        self.session.delete(director)
+        self.session.commit()

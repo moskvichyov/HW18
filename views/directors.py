@@ -1,4 +1,4 @@
-from flask_restx import Resource, Namespace
+from flask_restx import Resource, Namespace, abort
 
 from dao.model.director import DirectorSchema
 from container import director_service
@@ -13,8 +13,10 @@ class DirectorView(Resource):
         return DirectorSchema(many=True).dump(all_directors)
 
 
-@director_ns.route('/<int: did>')
+@director_ns.route('/<int:did>')
 class DirectorView(Resource):
     def get(self, did):
-        one_director = director_service.get_one(did)
-        return DirectorSchema().dump(one_director), 200
+        try:
+            return DirectorSchema().dump(director_service.get_one(did)), 200
+        except:
+            abort(404)

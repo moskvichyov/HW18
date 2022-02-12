@@ -1,11 +1,16 @@
 from dao.director import DirectorDao
+from exception import ItemNotFound
+
 
 class DirectorService:
     def __init__(self, dao: DirectorDao):
         self.dao = dao
 
     def get_one(self, did):
-        return self.dao.get_one(did)
+        result = self.dao.get_one(did)
+        if not result:
+            raise ItemNotFound
+        return result
 
     def get_all(self):
         return self.dao.get_all()
@@ -23,5 +28,9 @@ class DirectorService:
 
 
     def delete(self, did):
-        self.dao.delete(did)
+        result = self.dao.delete(did)
+        if not result:
+            raise ItemNotFound
+        return result
+
 

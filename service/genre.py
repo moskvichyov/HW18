@@ -1,11 +1,17 @@
 from dao.genre import GenreDao
+from exception import ItemNotFound
+
 
 class GenreService:
     def __init__(self, dao: GenreDao):
         self.dao = dao
 
     def get_one(self, gid):
-        return self.dao.get_one(gid)
+        result = self.dao.get_one(gid)
+        if not result:
+            raise ItemNotFound
+        return result
+
 
     def get_all(self):
         return self.dao.get_all()
@@ -22,4 +28,7 @@ class GenreService:
         self.dao.update(genre)
 
     def delete(self,gid):
-        self.dao.delete(gid)
+        result = self.dao.delete(gid)
+        if not result:
+            raise ItemNotFound
+        return result

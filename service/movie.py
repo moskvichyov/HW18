@@ -1,11 +1,17 @@
 from dao.movie import MovieDao
+from exception import ItemNotFound
+
 
 class MovieService:
     def __init__(self, dao: MovieDao):
         self.dao = dao
 
     def get_one(self, mid):
-        return self.dao.get_one(mid)
+        result = self.dao.get_one(mid)
+        if not result:
+            raise ItemNotFound
+        return result
+
 
     def get_all(self, filters):
         if filters.get("director_id") is not None:
@@ -60,3 +66,4 @@ class MovieService:
 
     def delete(self, mid):
         self.dao.delete(mid)
+
